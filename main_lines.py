@@ -26,13 +26,13 @@ def load_data(file_name, random_state):
     # Convert lists to numpy arrays
     data = np.array(data)
     labels = np.array(labels)
-
     # Convert 0 labels to -1
     labels[labels == 0.0] = -1
 
     # Split data into training and testing sets
     X_train, X_test, Y_train, Y_test = train_test_split(
         data, labels, test_size=0.5, random_state=random_state)
+
 
     return X_train, Y_train, X_test, Y_test
 
@@ -207,5 +207,5 @@ if __name__ == "__main__":
 
     # Print results
     for i in range(num_rules):
-        print(f"Average training error of rule {i}: {train_errors[i]}")
-        print(f"Average test error of rule {i}: {test_errors[i]}")
+        print(f"Empirical error mean of line rule H-{i} is : {train_errors[i]}")
+        print(f"Error mean of line rule H-{i} is: {test_errors[i]}")

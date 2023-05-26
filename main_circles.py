@@ -57,6 +57,7 @@ def generate_circles(X):
             # Create circles with both directions
             for direction in [-1, 1]:
                 circles.append((center, radius, direction))
+
     return circles
 
 
@@ -199,5 +200,5 @@ if __name__ == "__main__":
 
     # Print results
     for i in range(num_circles):
-        print(f"Average training error of circle {i}: {train_errors[i]}")
-        print(f"Average test error of circle {i}: {test_errors[i]}")
+        print(f"Empirical error mean of circle rule H-{i} is : {train_errors[i]}")
+        print(f"Error mean of circle rule H-{i} is: {test_errors[i]}")
