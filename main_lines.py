@@ -49,8 +49,8 @@ def generate_rules(X):
     """
     lines = []
     for i in range(len(X)):
-        for j in range(i + 1, len(X)):
-            if np.array_equal(X[i], X[j]) or X[j][0] - X[i][0] == 0 or X[j][1] - X[i][1] == 0:
+        for j in range(len(X)):
+            if i == j or np.array_equal(X[i], X[j]) or X[j][0] - X[i][0] == 0 or X[j][1] - X[i][1] == 0:
                 continue
             slope = (X[j][1] - X[i][1]) / (X[j][0] - X[i][0])
             intercept = X[i][1] - slope * X[i][0]
