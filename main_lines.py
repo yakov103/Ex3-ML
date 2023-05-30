@@ -54,7 +54,9 @@ def generate_rules(X):
                 continue
             slope = (X[j][1] - X[i][1]) / (X[j][0] - X[i][0])
             intercept = X[i][1] - slope * X[i][0]
-            lines.append((slope, intercept))
+            # Create rules with both orientations
+            for direction in [-1,1]:
+                lines.append(((X[j][0],X[j][1]),(X[i][0],X[i][1])))
     return lines
 
 
@@ -69,8 +71,15 @@ def predict_label(rule, point):
     Returns:
     - (int): Predicted label (-1 or 1)
     """
-    pred = rule[0] * point[0] + rule[1]
-    return 1 if pred > point[1] else -1
+    # pred = rule[0] * point[0] + rule[1]
+    # orient = rule[2]
+    # return orient if pred > point[1] else -orient
+    p1, p2 = rule
+    mat = np.array([[1, 1, 1], [p1[0], p2[0], point[0]], [p1[1], p2[1], point[1]]])
+    return -1 if np.linalg.det(mat) > 0 else 1
+    
+        
+    
 
 
 def is_rule_correct(rule, point, label):
@@ -134,20 +143,34 @@ def adaboost(X, Y, num_rules, rules):
     return rule_weights, rule_indices
 
 
+# def predict(X, rule):
+#     """
+#     Predict labels for given data based on a rule.
+
+#     Parameters:
+#     - X (np.array): Input data
+#     - rule (tuple): A rule as a tuple (slope, intercept)
+
+#     Returns:
+#     - prediction (np.array): Predicted labels
+#     """
+#     mask = X[:, 1] < (rule[0] * X[:, 0] + rule[1])
+#     prediction = np.zeros_like(X[:, 0]) - 1
+#     prediction[mask] = 1
+#     return prediction
+
 def predict(X, rule):
     """
-    Predict labels for given data based on a rule.
+    Predict labels for given data based on a circle.
 
     Parameters:
     - X (np.array): Input data
-    - rule (tuple): A rule as a tuple (slope, intercept)
+    - circle (tuple): A circle as a tuple (center, radius, direction)
 
     Returns:
     - prediction (np.array): Predicted labels
     """
-    mask = X[:, 1] < (rule[0] * X[:, 0] + rule[1])
-    prediction = np.zeros_like(X[:, 0]) - 1
-    prediction[mask] = 1
+    prediction = np.array([predict_label(rule, point) for point in X])
     return prediction
 
 def ada_error(X, Y, rules, rule_weights, rule_indices, k):
